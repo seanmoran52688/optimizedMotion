@@ -38,6 +38,11 @@ static void webu_stream_mjpeg_delay(struct webui_ctx *webui) {
     long   stream_rate;
     struct timeval time_curr;
     long   stream_delay;
+    time_t raw = time(NULL);
+    struct tm *ptm = localtime(&raw);
+    FILE *ptr;
+
+    ptr= fopen ("debugfile.txt", "a+");
 
     gettimeofday(&time_curr, NULL);
 
@@ -58,7 +63,9 @@ static void webu_stream_mjpeg_delay(struct webui_ctx *webui) {
         }
     }
     gettimeofday(&webui->time_last, NULL);
-
+    fprintf(ptr, "Time: %02d:%02d:%02d, fps: %d \n",  ptm->tm_hour, 
+           ptm->tm_min, ptm->tm_sec, webui->stream_fps);
+    fclose(ptr);
 }
 
 static void webu_stream_mjpeg_getimg(struct webui_ctx *webui) {

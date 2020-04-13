@@ -2230,7 +2230,8 @@ static void mlp_detection(struct context *cnt){
              * motion, the alg_diff will trigger alg_diff_standard
              * anyway
              */
-            if (cnt->detecting_motion || cnt->conf.setup_mode)
+        	// Use to be to be -> if (cnt->detecting_motion || cnt->conf.setup_mode)
+            if (cnt->detecting_motion)
                 cnt->current_image->diffs = alg_diff_standard(cnt, cnt->imgs.image_vprvcy.image_norm);
             else
                 cnt->current_image->diffs = alg_diff(cnt, cnt->imgs.image_vprvcy.image_norm);
@@ -2966,12 +2967,14 @@ static void *motion_loop(void *arg)
                 mlp_tuning(cnt);
                 mlp_overlay(cnt);
                 mlp_actions(cnt);
-                mlp_setupmode(cnt);
+                //Can possibly remove setupmode
+                //mlp_setupmode(cnt);
             }
-            mlp_snapshot(cnt);
-            mlp_timelapse(cnt);
+            //Can possibly remove snapshot, timelapse, parmsupdate
+            //mlp_snapshot(cnt);
+            //mlp_timelapse(cnt);
             mlp_loopback(cnt);
-            mlp_parmsupdate(cnt);
+            //mlp_parmsupdate(cnt);
             mlp_frametiming(cnt);
         }
     }
@@ -3662,6 +3665,7 @@ int main (int argc, char **argv)
             ,_("Waiting for threads to finish, pid: %d"), getpid());
 
         while (1) {
+            
             SLEEP(1, 0);
             if (motion_check_threadcount()) break;
 
